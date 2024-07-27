@@ -1,0 +1,42 @@
+{{{
+  exports({ to: app.makePath('inertia/app/app.tsx') })
+}}}
+/// <reference path="../../adonisrc.ts" />
+/// <reference path="../../config/inertia.ts" />
+
+import '../css/app.css';
+
+{{#if ssr}}
+import { hydrate } from 'kaioken/ssr/client'
+{{#else}}
+import { mount } from 'kaioken'
+{{/if}}
+import { createInertiaApp } from 'inertia-kaioken-adapter'
+import { resolvePageComponent } from '@adonisjs/inertia/helpers'
+
+const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
+
+createInertiaApp({
+  progress: { color: '#5468FF' },
+
+  resolve: (name: string) => {
+    return resolvePageComponent(
+      {{ '`../pages/${name}.tsx`' }},
+      import.meta.glob('../pages/**/*.tsx'),
+    )
+  },
+
+  setup({ el, App, props }) {
+    if (!el) return
+
+    {{#if ssr}}
+    hydrate(() => {
+      return <App {...props} />
+    }, el)
+    {{#else}}
+    mount(() => {
+      return <App {...props} />
+    }, el)
+    {{/if}}
+  },
+});
