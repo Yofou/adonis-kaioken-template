@@ -62,6 +62,7 @@ export async function configure(command: Configure) {
     ssrEntrypoint: 'inertia/app/ssr.tsx',
   })
   await codemods.makeUsingStub(stubsRoot, `app.css.stub`, {})
+  await codemods.makeUsingStub(stubsRoot, `global.d.ts.stub`, {})
   await codemods.makeUsingStub(stubsRoot, `kaioken/root.edge.stub`, {})
   await codemods.makeUsingStub(stubsRoot, `kaioken/tsconfig.json.stub`, {})
   await codemods.makeUsingStub(stubsRoot, `kaioken/app.tsx.stub`, { ssr })
